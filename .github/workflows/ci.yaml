@@ -24,7 +24,7 @@ jobs:
 
     # 3. סנכרון והתקנת כל התלויות (כולל ספריות הבדיקה והפיתוח)
     - name: Install dependencies
-      run: uv sync
+      run: uv sync --no-install-project
 
     # 4. הרצת Ruff לבדיקת שגיאות לוגיות וסגנון קוד
     - name: Run Ruff Linter
