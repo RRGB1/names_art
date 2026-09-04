@@ -1,0 +1,43 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. משיכת הקוד של הפרויקט לשרת הווירטואלי
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. התקנת כלי ה-uv ופייתון 3.12 (עם תמיכה ב-Caching למהירות שיא)
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        python-version: "3.12"
+
+    # 3. סנכרון והתקנת כל התלויות (כולל ספריות הבדיקה והפיתוח)
+    - name: Install dependencies
+      run: uv sync --all-extras --dev
+
+    # 4. הרצת Ruff לבדיקת שגיאות לוגיות וסגנון קוד
+    - name: Run Ruff Linter
+      run: uv run ruff check
+
+    # 5. וידאו שכל הקוד מעוצב ומפורמט כראוי
+    - name: Run Ruff Formatter Check
+      run: uv run ruff format --check
+
+    # 6. בדיקת טיפוסים סטטית קפדנית באמצעות Mypy
+    - name: Run Mypy Type Checker
+      run: uv run mypy src/
+
+    # 7. הרצת בדיקות היחידה האוטומטיות באמצעות Pytest
+    - name: Run Pytest
+      run: uv run pytest
