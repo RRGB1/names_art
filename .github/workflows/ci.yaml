@@ -15,16 +15,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 2. התקנת כלי ה-uv ופייתון 3.12 (עם תמיכה ב-Caching למהירות שיא)
+    # 2. התקנת כלי ה-uv ופייתון 3.13 (עם תמיכה ב-Caching למהירות שיא)
     - name: Set up uv
       uses: astral-sh/setup-uv@v5
       with:
         enable-cache: true
-        python-version: "3.12"
+        python-version: "3.13"
 
     # 3. סנכרון והתקנת כל התלויות (כולל ספריות הבדיקה והפיתוח)
     - name: Install dependencies
-      run: uv sync --no-install-project
+      run: uv sync
 
     # 4. הרצת Ruff לבדיקת שגיאות לוגיות וסגנון קוד
     - name: Run Ruff Linter
